@@ -1,25 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jimmy\\mingyu\\OptionEval\\OptionEval.csproj": {}
+    "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jimmy\\mingyu\\OptionEval\\OptionEval.csproj": {
+    "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jimmy\\mingyu\\OptionEval\\OptionEval.csproj",
+        "projectUniqueName": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj",
         "projectName": "OptionEval",
-        "projectPath": "C:\\Users\\Jimmy\\mingyu\\OptionEval\\OptionEval.csproj",
-        "packagesPath": "C:\\Users\\Jimmy\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jimmy\\mingyu\\OptionEval\\obj\\",
+        "projectPath": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj",
+        "packagesPath": "/Users/mingyuliu/.nuget/packages/",
+        "outputPath": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Jimmy\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mingyuliu/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -70,7 +71,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }
