@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj": {}
+    "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj": {}
   },
   "projects": {
-    "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj": {
+    "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj",
+        "projectUniqueName": "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj",
         "projectName": "OptionEval",
-        "projectPath": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/OptionEval.csproj",
+        "projectPath": "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj",
         "packagesPath": "/Users/mingyuliu/.nuget/packages/",
-        "outputPath": "/Users/mingyuliu/Documents/GitHub/newOptionEval/OptionEval/obj/",
+        "outputPath": "/Users/mingyuliu/Projects/OptionEval/OptionEval/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/mingyuliu/.nuget/NuGet/NuGet.Config"
