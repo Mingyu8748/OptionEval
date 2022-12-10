@@ -1,0 +1,24 @@
+{
+  "optionParam": {
+    "IsCall": true,
+    "UnderlyingPrice": 50,
+    "Strike": 50,
+    "Tenor": 1,
+    "Rate": 0.02
+  },
+  "market": {
+    "Name": "option",
+    "Exchange": "cpg",
+    "Symbol": "spy",
+    "Units": "100"
+  },
+  "setting": {
+    "OptionType": "AsianCall",
+    "EnableControlVariate": true,
+    "Antithetic": true,
+    "EnabelMultithreading": false
+  },
+  "numberOfPath": 100,
+  "mu": 0.05,
+  "sigma": 0.02
+}
