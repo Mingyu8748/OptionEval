@@ -1,59 +1,55 @@
 namespace Monte_Carlo_Simulation;
 
-class Option
+class OptionCalculator
 {
-    public Dictionary<string, double> EuropeanCall(Int64 n, double t, double mu, double sigma, double s0, double k,
+    public double EuropeanCall(Int64 N, double T, double mu, double sigma, double s0, double k,
         double r, double[,] price)
     {
         // payoff & option price calculation
         var sum = 0.0;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < N; i++)
         {
-            var payoff = price[i, (int) (t * 252)] - k;
+            var payoff = price[i, (int) (T * 252)] - k;
             if (payoff > 0) ;
             {
                 sum += payoff;
             }
         }
 
-        var mean = sum / n;
-        var callprice = mean * Math.Exp(-r * t);
+        var mean = sum / N;
+        var callprice = mean * Math.Exp(-r * T);
         //Control variate method 
         var K_2 = 50;
         var sum2 = 0.0;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < N; i++)
         {
-            var payoff2 = price[i, (int) (t * 252)] - K_2;
+            var payoff2 = price[i, (int) (T * 252)] - K_2;
             if (payoff2 > 0) ;
             {
                 sum2 += payoff2;
             }
         }
 
-        var bnum = (sum2 - sum2 / n) * (sum - mean);
+        var bnum = (sum2 - sum2 / N) * (sum - mean);
         var bdenom = Math.Pow((sum - mean), 2);
         var b = bnum / bdenom;
         // standard error of the call price
         var diffsum = 0.0;
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < N; i++)
         {
-            var payoff = price[i, (int) (t * 252)] - k;
-            var eachprice = payoff * Math.Exp(-r * t);
+            var payoff = price[i, (int) (T * 252)] - k;
+            var eachprice = payoff * Math.Exp(-r * T);
             var diff = Math.Pow((eachprice - callprice), 2);
             diffsum += diff;
         }
 
-        var std = diffsum / (n - 1);
-        var std_error = std / Math.Pow(n, 0.5);
+        var std = diffsum / (N - 1);
+        var std_error = std / Math.Pow(N, 0.5);
 
-        return new Dictionary<string, double>
-        {
-            {"call option price", callprice},
-            {"standard error estimation", std_error}
-        };
+        return callprice;
     }
 
-    public Dictionary<string, double> EuropeanPut(Int64 N, double T, double mu, double sigma, double s0, double k,
+    public double EuropeanPut(Int64 N, double T, double mu, double sigma, double s0, double k,
         double r, double[,] price)
     {
         var sum = 0.0;
@@ -82,12 +78,8 @@ class Option
         var std = diffsum / (N - 1);
         var std_error = std / Math.Pow(N, 0.5);
 
-        return new Dictionary<string, double>
-        {
-            {"put option price", putprice},
-            {"standard error estimation", std_error}
-        };
-    }
+        return putprice;
+        }
 
     public double AsianCall(Int64 N, double T, double mu, double sigma, double s0, double k,
         double r, double[,] price)
@@ -253,20 +245,20 @@ class Option
         //var deltaT = T / 10;
         var deltaR = r / 10;
         var price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var originalPrice = EuropeanCall(N, T, mu, sigma, s0, k, r, price)["call option price"];
+        var originalPrice = EuropeanCall(N, T, mu, sigma, s0, k, r, price);
         // Delta
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusS0 = EuropeanCall(N, T, mu, sigma, s0 + deltaS, k, r, price)["call option price"];
+        var priceplusS0 = EuropeanCall(N, T, mu, sigma, s0 + deltaS, k, r, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusS0 = EuropeanCall(N, T, mu, sigma, s0 - deltaS, k, r, price)["call option price"];
+        var priceminusS0 = EuropeanCall(N, T, mu, sigma, s0 - deltaS, k, r, price);
         var delta = (priceplusS0 - priceminusS0) / (2 * deltaS);
         //gamma
         var gamma = (priceplusS0 - 2 * originalPrice + priceminusS0) / Math.Pow(deltaS, 2);
         // vega
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusSigma = EuropeanCall(N, T, mu, sigma + deltaSigma, s0, k, r, price)["call option price"];
+        var priceplusSigma = EuropeanCall(N, T, mu, sigma + deltaSigma, s0, k, r, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusSigma = EuropeanCall(N, T, mu, sigma - deltaSigma, s0, k, r, price)["call option price"];
+        var priceminusSigma = EuropeanCall(N, T, mu, sigma - deltaSigma, s0, k, r, price);
         var vega = (priceplusSigma - priceminusSigma) / (2 * deltaSigma);
         // Theta
         // //price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
@@ -274,9 +266,9 @@ class Option
         //var theta = (priceplusT - originalPrice) / deltaT;
         // Rho 
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusR = EuropeanCall(N, T, mu, sigma, s0, k, r + deltaR, price)["call option price"];
+        var priceplusR = EuropeanCall(N, T, mu, sigma, s0, k, r + deltaR, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusR = EuropeanCall(N, T, mu, sigma, s0, k, r - deltaR, price)["call option price"];
+        var priceminusR = EuropeanCall(N, T, mu, sigma, s0, k, r - deltaR, price);
         var rho = (priceplusR - priceminusR) / (2 * deltaR);
         return new Dictionary<string, double>
         {
@@ -295,30 +287,30 @@ class Option
         var deltaT = T / 10;
         var deltaR = r / 10;
         var price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var originalPrice = EuropeanPut(N, T, mu, sigma, s0, k, r, price)["put option price"];
+        var originalPrice = EuropeanPut(N, T, mu, sigma, s0, k, r, price);
         // Delta
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusS0 = EuropeanPut(N, T, mu, sigma, s0 + deltaS, k, r, price)["put option price"];
+        var priceplusS0 = EuropeanPut(N, T, mu, sigma, s0 + deltaS, k, r, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusS0 = EuropeanPut(N, T, mu, sigma, s0 - deltaS, k, r, price)["put option price"];
+        var priceminusS0 = EuropeanPut(N, T, mu, sigma, s0 - deltaS, k, r, price);
         var delta = (priceplusS0 - priceminusS0) / (2 * deltaS);
         //gamma
         var gamma = (priceplusS0 - 2 * originalPrice + priceminusS0) / Math.Pow(deltaS, 2);
         // vega
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusSigma = EuropeanPut(N, T, mu, sigma + deltaSigma, s0, k, r, price)["put option price"];
+        var priceplusSigma = EuropeanPut(N, T, mu, sigma + deltaSigma, s0, k, r, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusSigma = EuropeanPut(N, T, mu, sigma - deltaSigma, s0, k, r, price)["put option price"];
+        var priceminusSigma = EuropeanPut(N, T, mu, sigma - deltaSigma, s0, k, r, price);
         var vega = (priceplusSigma - priceminusSigma) / (2 * deltaSigma);
         // Theta
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusT = EuropeanPut(N, T + deltaT, mu, sigma, s0, k, r, price)["put option price"];
+        var priceplusT = EuropeanPut(N, T + deltaT, mu, sigma, s0, k, r, price);
         var theta = (priceplusT - originalPrice) / deltaT;
         // Rho
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceplusR = EuropeanPut(N, T, mu, sigma, s0, k, r + deltaR, price)["put option price"];
+        var priceplusR = EuropeanPut(N, T, mu, sigma, s0, k, r + deltaR, price);
         price = StockSimulator.StockPath(N, T, mu, sigma, s0, antithetic, RandomNumberGenerator.Generate(N, T));
-        var priceminusR = EuropeanPut(N, T, mu, sigma, s0, k, r - deltaR, price)["put option price"];
+        var priceminusR = EuropeanPut(N, T, mu, sigma, s0, k, r - deltaR, price);
         var rho = (priceplusR - priceminusR) / (2 * deltaR);
         return new Dictionary<string, double>
         {

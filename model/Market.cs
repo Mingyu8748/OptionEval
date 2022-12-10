@@ -12,6 +12,3 @@ public class Market
     public string? Symbol  { get; set; }
     public string? Units { get; set; }
 }
-
-
-

@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using OptionEval.Model;
 using System.Text.Json;
 using Monte_Carlo_Simulation;
-using OptionEval.Model;
-
 namespace OptionEval.Controllers;
 
 [ApiController]
@@ -35,11 +33,37 @@ public class OptionEvalController : ControllerBase
 
 
 
-        var option = new Option();
+        var optioncalc = new OptionCalculator();
         switch (request.setting.OptionType)
         {
+            case "EuropeanCall":
+                result.OptionValue = optioncalc.EuropeanCall(
+                    request.numberOfPath,
+                    request.optionParam.Tenor,
+                    request.mu,
+                    request.sigma,
+                    request.optionParam.UnderlyingPrice,
+                    request.optionParam.Strike,
+                    request.optionParam.Rate,
+                    price
+
+                );
+                break;
+
+            case "EuropeanPut":
+                result.OptionValue = optioncalc.EuropeanPut(
+                    request.numberOfPath,
+                    request.optionParam.Tenor,
+                    request.mu,
+                    request.sigma,
+                    request.optionParam.UnderlyingPrice,
+                    request.optionParam.Strike,
+                    request.optionParam.Rate,
+                    price);
+                break;
+
             case "AsianCall":
-                result.OptionValue = option.AsianCall(
+                result.OptionValue = optioncalc.AsianCall(
                     request.numberOfPath,
                     request.optionParam.Tenor,
                     request.mu,
@@ -50,7 +74,7 @@ public class OptionEvalController : ControllerBase
                     price);
                 break;
             case "AsianPut":
-                result.OptionValue = option.AsianPut(
+                result.OptionValue = optioncalc.AsianPut(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
@@ -61,7 +85,7 @@ public class OptionEvalController : ControllerBase
                    price);
                 break;
             case "DigitalCall":
-                result.OptionValue = option.DigitalCall(
+                result.OptionValue = optioncalc.DigitalCall(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
@@ -73,7 +97,7 @@ public class OptionEvalController : ControllerBase
                    price);
                 break;
             case "DigitalPut":
-                result.OptionValue = option.DigitalCall(
+                result.OptionValue = optioncalc.DigitalCall(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
@@ -85,7 +109,7 @@ public class OptionEvalController : ControllerBase
                    price);
                 break;
             case "LookbackCall":
-                result.OptionValue = option.LookbackCall(
+                result.OptionValue = optioncalc.LookbackCall(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
@@ -96,7 +120,7 @@ public class OptionEvalController : ControllerBase
                    price);
                 break;
             case "LookbackPut":
-                result.OptionValue = option.LookbackPut(
+                result.OptionValue = optioncalc.LookbackPut(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
@@ -107,7 +131,7 @@ public class OptionEvalController : ControllerBase
                    price);
                 break;
             case "RangeOption":
-                result.OptionValue = option.RangeOption(
+                result.OptionValue = optioncalc.RangeOption(
                    request.numberOfPath,
                    request.optionParam.Tenor,
                    request.mu,
