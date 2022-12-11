@@ -11,7 +11,7 @@ using Npgsql;
 public class FinanceContext : DbContext{
     public DbSet<Exchange> Exchanges { get; set;}
     public DbSet<TradingMarket> Markets {get;set;}
-    public DbSet<Unit> Units {get;set;}
+    public DbSet<Unit> Unit {get;set;}
     public DbSet<FinancialInstrument> FinancialInstruments {get;set;}
     public DbSet<RatePoint> RatePoints {get;set;}
     public DbSet<Ratecurve> RateCurves {get;set;}
@@ -99,7 +99,6 @@ public class Historical_price
     public DateTime dateofobservation {get;set;}
     public string price_of {get;set;} // this is either underlying, option, or future
     public int price_of_id {get;set;} // price_of to go to the proper table and price_of_id to go to proper option, underlying, or future
-    // id, refers to inst, date of obser, price(s)
 }
 
 //ratepoint = new ratepoint{}

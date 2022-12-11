@@ -14,7 +14,7 @@
   <body>
     
     <nav class="navbar mingyu navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Portfolio Management</a>
+        <a class="navbar-brand">Portfolio Management</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,34 +22,34 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#"> Exchange <span class="sr-only">(current)</span></a>
+              <a class="nav-link" onclick="getAllExchanges()"> Exchange <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Market</a>
+              <a class="nav-link">Market</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Unit</a>
+              <a class="nav-link">Unit</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Instrument</a>
+              <a class="nav-link">Instrument</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Rate Point</a>
+              <a class="nav-link">Rate Point</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Rate Curve</a>
+              <a class="nav-link">Rate Curve</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Historical Price</a>
+              <a class="nav-link">Historical Price</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Underlying</a>
+              <a class="nav-link">Underlying</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Option</a>
+              <a class="nav-link">Option</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Trade Evaluation</a>
+              <a class="nav-link">Trade Evaluation</a>
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0">
@@ -61,32 +61,20 @@
         </div>
     </nav>
 
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Symbol</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td id="id">Mark</td>
-            <td id="name">Otto</td>
-            <td id="symbol">@mdo</td>
-          </tr>
-        </tbody>
-    </table>
+    <!-- input area -->
+    <form >
+      <div class="col-md-6 mb-3">
+          <label for="name">Name</label>
+          <input type="text" class="form-control" id="exchange-name" placeholder="" value="">
+          <label for="Symbol">Symbol</label>
+          <input type="text" class="form-control" id="exchange-symbol" placeholder="" value="">
+      </div>
+      <button class="btn btn-primary btn-lg btn-block" onclick="updateExchange()">Sumbit</button>
+      <button class="btn btn-primary btn-lg btn-block" onclick="deleteAllExchanges()">DELETE ALL</button>
+    </form>
 
-
-    <div>
-      <button onclick="getAllExchanges()">i am a button</button>
-      <p id="mingyu">
-        
-      </p>
-    </div>
+    <!-- table area -->
+    <table class="table" id="table"></table>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
