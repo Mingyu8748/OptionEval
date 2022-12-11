@@ -1,11 +1,71 @@
 {
   "Version": 1,
-  "Hash": "w1ol6LMqC5Zap92aSLEMwJckabETz8uSp8vlf+2MHJc=",
+  "Hash": "jhM27LV2/o4f90VXhD4t1LPwOYOIoMu7wc9JtLRdt1E=",
   "Source": "OptionEval",
   "BasePath": "_content/OptionEval",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "OptionEval/wwwroot",
+      "Source": "OptionEval",
+      "ContentRoot": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/",
+      "BasePath": "_content/OptionEval",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/index.css",
+      "SourceId": "OptionEval",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/",
+      "BasePath": "_content/OptionEval",
+      "RelativePath": "index.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.css"
+    },
+    {
+      "Identity": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/index.html",
+      "SourceId": "OptionEval",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/",
+      "BasePath": "_content/OptionEval",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    },
+    {
+      "Identity": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/index.js",
+      "SourceId": "OptionEval",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/mingyuliu/Documents/GitHub/OptionEval/wwwroot/",
+      "BasePath": "_content/OptionEval",
+      "RelativePath": "index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.js"
+    }
+  ]
 }

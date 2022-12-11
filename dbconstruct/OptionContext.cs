@@ -28,7 +28,7 @@ public class FinanceContext : DbContext{
     public DbSet<Option_Trade_Evaluation> OptionTradeEvaluations{get;set;}
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-                    =>optionsBuilder.UseNpgsql("host=localhost;Database=ourdb;Username=postgres;Password=");
+                    =>optionsBuilder.UseNpgsql("host=localhost;Database=OptionEval;Username=root;Password=root");
 }
 
 [Table("Exchange")]

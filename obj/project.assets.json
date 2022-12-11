@@ -1516,11 +1516,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj",
+      "projectUniqueName": "/Users/mingyuliu/Documents/GitHub/OptionEval/OptionEval.csproj",
       "projectName": "OptionEval",
-      "projectPath": "/Users/mingyuliu/Projects/OptionEval/OptionEval/OptionEval.csproj",
+      "projectPath": "/Users/mingyuliu/Documents/GitHub/OptionEval/OptionEval.csproj",
       "packagesPath": "/Users/mingyuliu/.nuget/packages/",
-      "outputPath": "/Users/mingyuliu/Projects/OptionEval/OptionEval/obj/",
+      "outputPath": "/Users/mingyuliu/Documents/GitHub/OptionEval/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/mingyuliu/.nuget/NuGet/NuGet.Config"
@@ -1529,7 +1529,6 @@
         "net7.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
