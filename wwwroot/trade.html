@@ -57,13 +57,6 @@
                 </li>
 
             </ul>
-
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                <nav class="navbar navbar-dark bg-dark">
-                    <!-- Navbar content -->
-            </form>
         </div>
     </nav>
 
@@ -71,20 +64,27 @@
     <div class="col-md-6 mb-3">
         <label for="Quantity">Quantity</label>
         <input type="text" class="form-control" id="trade-quantity" placeholder="" value="">
-        <label for="Price">Price</label>
+        <label for="Price">Trade Price</label>
         <input type="text" class="form-control" id="trade-price" placeholder="" value="">
         <label for="Type">Type</label>
         <input type="text" class="form-control" id="trade-type"
-            placeholder="Choose from: Asian, Range, Digital, Lookback, European, Barrier" value="European">
+            placeholder="Choose from: All, Asian, Range, Digital, Lookback, European, Barrier" value="All" onchange="updateOnTradeTypeChange()">
+        <label for="ID">Financial Insturment ID</label>
+        <input type="text" class="form-control" id="trade-price" placeholder="pick from list below" value="">
     </div>
-    <button type="button" class="btn btn-dark" onclick="updateUnderlying()">Sumbit</button>
-    <button type="button" class="btn btn-warning" onclick="deleteAllUnderlying()">DELETE ALL</button>
+    <button type="button" class="btn btn-dark" onclick="simulate()">Simulate</button>
 
     <!-- table area -->
     <div>
         <label for="table">Financial Instruments</label>
         <table class="table" id="table-instrument"></table>
     </div>
+    <button type="button" class="btn btn-warning" onclick="deleteAllUnderlying()">DELETE ALL Trades</button>
+    <div>
+        <label for="table-history">Trade History</label>
+        <table class="table" id="trade-history"></table>
+    </div>
+
 
 
     <!-- Optional JavaScript -->

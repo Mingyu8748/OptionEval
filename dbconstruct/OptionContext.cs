@@ -179,8 +179,10 @@ public class Trade
     public int Id {get;set;}
     public double quantity {get;set;} // change to quantity, dont need is buy
     public int FinancialInstrumentId {get;set;}
-    public FinancialInstrument financialInstrument {get;set;}
+    public FinancialInstrument? financialInstrument {get;set;}
     public double Trade_Price {get;set;} // price it was traded at
+    public int EvaluationId {get;set;}
+    public Option_Trade_Evaluation Evaluation {get;set;}
 }
 
 [Table("OptionTradeEvaluation")]
