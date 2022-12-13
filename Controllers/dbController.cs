@@ -592,6 +592,79 @@ public class dbController : ControllerBase
         return Ok();
     }
 
+    // controllers for Option_Trade_Evaluation
+    [HttpGet]
+    [Route("/OptionTradeEvaluation")]
+    public IEnumerable<Option_Trade_Evaluation> GetOption_Trade_Evaluation()
+    {
+        return db.OptionTradeEvaluations.ToArray();
+    }
+
+    [HttpGet]
+    [Route("/OptionTradeEvaluation/{id}")]
+    public ActionResult<Option_Trade_Evaluation> GetOption_Trade_Evaluation(int id)
+    {
+        return db.OptionTradeEvaluations.Find(id);
+    }
+
+    [HttpPut]
+    [Route("/OptionTradeEvaluation")]
+    public ActionResult<Option_Trade_Evaluation> UpdateOption_Trade_Evaluation([FromBody] Option_Trade_Evaluation option_Trade_Evaluations)
+    {
+        var existingOption_Trade_Evaluations = db.OptionTradeEvaluations.Find(option_Trade_Evaluations.Id);
+        if (existingOption_Trade_Evaluations == null)
+        {
+            db.OptionTradeEvaluations.Add(option_Trade_Evaluations);
+        }
+        else
+        {
+            existingOption_Trade_Evaluations.Id = option_Trade_Evaluations.Id;
+            existingOption_Trade_Evaluations.Unrealized_Pnl = option_Trade_Evaluations.Unrealized_Pnl;
+            existingOption_Trade_Evaluations.Delta = option_Trade_Evaluations.Delta;
+            existingOption_Trade_Evaluations.Gamma = option_Trade_Evaluations.Gamma;
+            existingOption_Trade_Evaluations.Vega = option_Trade_Evaluations.Vega;
+            existingOption_Trade_Evaluations.Rho = option_Trade_Evaluations.Rho;
+            existingOption_Trade_Evaluations.Theta = option_Trade_Evaluations.Theta;
+            option_Trade_Evaluations = null;
+            db.OptionTradeEvaluations.Update(existingOption_Trade_Evaluations);
+        }
+        db.SaveChanges();
+        return Ok(option_Trade_Evaluations);
+    }
+    [HttpDelete("/OptionTradeEvaluation/delete/{id}")]
+    public ActionResult<Option_Trade_Evaluation> DeleteOption_Trade_Evaluation(int id)
+    {
+        var option_Trade_Evaluation = db.OptionTradeEvaluations.Find(id);
+        db.OptionTradeEvaluations.Remove(option_Trade_Evaluation);
+        db.SaveChanges();
+        return NoContent();
+    }
+
+    [HttpDelete("/OptionTradeEvaluation/delete-all")]
+    public ActionResult DeleteOption_Trade_Evaluation()
+    {
+        var option_Trade_Evaluations = db.OptionTradeEvaluations.ToArray();
+
+        foreach (Option_Trade_Evaluation option_Trade_Evaluation in option_Trade_Evaluations)
+        {
+            if (option_Trade_Evaluation != null)
+            {
+                db.OptionTradeEvaluations.Remove(option_Trade_Evaluation);
+            }
+        }
+        db.SaveChanges();
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("/Simulate")]
+    public ActionResult Simulate([FromBody]  request)) {
+
+        return Ok();
+    }
+
+
+
 
     [HttpGet]
     [Route("/Load")]
