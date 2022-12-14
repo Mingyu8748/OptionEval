@@ -42,7 +42,7 @@ const getAllEuropeanInputFields = async () => {
     <label for="name">Volitility</label>
     <input type="text" class="form-control" id="option-volitility" placeholder="" value="">
 
-    <label for="name">Expiration Date</label>
+    <label for="name">Expire In Days</label>
     <input type="text" class="form-control" id="option-expiration" placeholder="" value="">
 
     <label for="name">Strike</label>
@@ -65,7 +65,7 @@ function getEuropeanOptions(options, instruments) {
         <th scope="col">Symbol</th>
         <th scope="col">Price</th> 
         <th scope="col">Volitility</th> 
-        <th scope="col">Expiration Date</th> 
+        <th scope="col">Expire In Days</th> 
         <th scope="col">Strike</th> 
         <th scope="col">Is Call</th> 
         <th scope="col">Underlying</th> 
@@ -74,9 +74,7 @@ function getEuropeanOptions(options, instruments) {
     <tbody>
     `
 
-    console.log(options);
     instruments = getInstrumentMap(instruments);
-    console.log(instruments);
     options.forEach(option => {
         var instrument = instruments.get(option.underlyingId);
         html += `
@@ -96,7 +94,7 @@ function getEuropeanOptions(options, instruments) {
         <td id="Name">${option.volatility}</td>
         `
         html += `
-        <td id="Name">${option.expiration_Date}</td>
+        <td id="Name">${option.expireIn}</td>
         `
         html += `
         <td id="Name">${option.strike}</td>
@@ -155,6 +153,7 @@ const getInstrumentMap = (instruments) => {
     return instrumentMap;
 }
 
+
 const getIMById = (instruments, id) => {
     instruments.forEach(instrument => {
         if (instrument.financialInstrumentID === id) {
@@ -180,7 +179,6 @@ const getIMById = (instruments, id) => {
 const updateEuropeanOptions = async () => {
     var inputName = document.getElementById('option-name').value;
     var inputSymbol = document.getElementById('option-symbol').value;
-    var inputPrice = parseFloat(document.getElementById('option-price').value);
     var inputvolitility = parseFloat(document.getElementById('option-volitility').value);
     var inputexpiration = document.getElementById('option-expiration').value;
     var inputstrike =  parseFloat(document.getElementById('option-strike').value);
@@ -195,7 +193,7 @@ const updateEuropeanOptions = async () => {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name: inputName, symbol: inputSymbol, volatility:inputvolitility, expiration_Date:inputexpiration, strike:inputstrike, is_Call:inputcall, tradingMarketId: udnerlying.tradingMarketId, underlyingId: udnerlying.financialInstrumentID })
+        body: JSON.stringify({ name: inputName, symbol: inputSymbol, volatility:inputvolitility, expireIn:inputexpiration, strike:inputstrike, is_Call:inputcall, tradingMarketId: udnerlying.tradingMarketId, underlyingId: udnerlying.financialInstrumentID })
     });
     await getAllOptions();
 }

@@ -159,9 +159,8 @@ namespace OptionEval.Migrations
                 {
                     b.HasBaseType("OptionDatabase.FinancialInstrument");
 
-                    b.Property<string>("Expiration_Date")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("expireIn")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("underlyingId")
                         .HasColumnType("integer");

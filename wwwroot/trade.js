@@ -5,7 +5,6 @@ window.onload = function () {
 
 
 const updateOnTradeTypeChange = async () => {
-    console.log("yo");
     getTradeAllOptions();
 }
 
@@ -41,7 +40,7 @@ function getEuropeanOptions(options, instruments) {
         <th scope="col">Symbol</th>
         <th scope="col">Price</th> 
         <th scope="col">Volitility</th> 
-        <th scope="col">Expiration Date</th> 
+        <th scope="col">Expire In</th> 
         <th scope="col">Strike</th> 
         <th scope="col">Is Call</th> 
         <th scope="col">Underlying</th> 
@@ -50,9 +49,7 @@ function getEuropeanOptions(options, instruments) {
     <tbody>
     `
 
-    console.log(options);
     instruments = getInstrumentMap(instruments);
-    console.log(instruments);
     options.forEach(option => {
         var instrument = instruments.get(option.underlyingId);
         html += `
@@ -72,7 +69,7 @@ function getEuropeanOptions(options, instruments) {
         <td id="Name">${option.volatility}</td>
         `
         html += `
-        <td id="Name">${option.expiration_Date}</td>
+        <td id="Name">${option.expireIn}</td>
         `
         html += `
         <td id="Name">${option.strike}</td>
@@ -104,10 +101,11 @@ const getInstrumentMap = (instruments) => {
     return instrumentMap;
 }
 
-const   getAllInstruments= async () => {
+const getAllInstruments= async () => {
 
     const mresponse = await fetch('/FinancialInstrument');
     const trades = await mresponse.json();
+
 
     const response = await fetch('/Market');
     const markets = await response.json();
@@ -184,19 +182,18 @@ const getAllTrades = async () => {
 
     const response = await fetch('/FinancialInstrument');
     var instruments = await response.json();
-    instruments = getInstrumentMap(instruments);
+
+    const maresponse = await fetch('/Market');
+    var markets = await maresponse.json();
 
     const evalresponse = await fetch('/OptionTradeEvaluation');
     var evals = await evalresponse.json();
-    evals = getInstrumentMap(evals);
         var html = `
         <thead>
           <tr>
             <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Symbol</th>
+            <th scope="col">Quantity</th>
             <th scope="col">Price</th> 
-            <th scope="col">Market</th> 
             <th scope="col">Financial Instrument</th> 
 
             <th scope="col">Evluation Id</th> 
@@ -210,21 +207,22 @@ const getAllTrades = async () => {
         </thead>
         <tbody>
         `
+
         trades.forEach(trade => {
-            var instrument = instruments.get(trade.financialInstrumentID);
-            var eval = evals.get(trade.EvaluationId);
+            var instrument = getInstrumentByTrade(instruments, trade);
+            
+            var eval = getEvalByTrade(evals, trade);
+
+            console.log(eval);
             html += `
             <tr>
-            <td id="id">${trade.financialInstrumentID}</td>
+            <td id="id">${trade.financialInstrumentId}</td>
             `
             html += `
             <td id="Quantity">${trade.quantity}</td>
             `
             html += `
-            <td id="Name">${trade.price}</td>
-            ` 
-            html += `
-            <td id="Symbol">${getMarketsByMarketId(markets, trade.tradingMarketId)}</td>
+            <td id="Name">${trade.trade_Price}</td>
             ` 
             html += `
             <td id="Symbol">${instrument.financialInstrumentID} - ${instrument.name} - ${instrument.price}</td>
@@ -236,16 +234,16 @@ const getAllTrades = async () => {
             <td id="Symbol">${eval.unrealized_Pnl}</td>
             ` 
             html += `
-            <td id="Symbol">${eval.Gamma}</td>
+            <td id="Symbol">${eval.gamma}</td>
             ` 
             html += `
-            <td id="Symbol">${eval.Vega}</td>
+            <td id="Symbol">${eval.vega}</td>
             ` 
             html += `
-            <td id="Symbol">${eval.Rho}</td>
+            <td id="Symbol">${eval.rho}</td>
             ` 
             html += `
-            <td id="Symbol">${eval.Theta}</td>
+            <td id="Symbol">${eval.theta}</td>
             </tr>
             `
         }); 
@@ -258,4 +256,42 @@ const getAllTrades = async () => {
         document.getElementById("trade-history").innerHTML = html;
         resolve();  // <----- Resolve!
     })
+}
+
+const simulate = async () => {
+    var inputName = document.getElementById('trade-type').value
+    var inputQuantity = document.getElementById('trade-quantity').value
+    var inputPrice = document.getElementById('trade-price').value
+    var inputid = document.getElementById('trade-id').value
+
+    const rawResponse = await fetch('/Simulate', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ Type: inputName, Quantity: inputQuantity, TradePrice: inputPrice, FinancialInstrumentId: inputid})
+    });
+    await getAllTrades();
+}
+
+
+const getInstrumentByTrade = (instruments, trade) => {
+    let instrumentMap = null;
+    instruments.forEach(instrument => {
+        if (instrument.financialInstrumentID == trade.financialInstrumentId) {
+            instrumentMap = instrument;
+        }
+    });
+    return instrumentMap;
+}
+
+const getEvalByTrade = (evals, trade) => {
+    let instrumentMap = null;
+    evals.forEach(eval => {
+        if (eval.id == trade.evaluationId) {
+            instrumentMap = eval;
+        }
+    });
+    return instrumentMap;
 }

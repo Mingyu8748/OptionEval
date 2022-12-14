@@ -119,7 +119,7 @@ public class Underlying : FinancialInstrument
 public class Option: FinancialInstrument
 {
     public double volatility {get;set;}
-    public string Expiration_Date {get; set;}
+    public double expireIn {get; set;}
     public int underlyingId {get; set;}
     public Underlying? underlying {get; set;}
 
@@ -196,4 +196,5 @@ public class Option_Trade_Evaluation
     public double Rho {get; set;}
     public double Theta {get; set;}
 }
+
 

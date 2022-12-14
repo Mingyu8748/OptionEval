@@ -62,21 +62,21 @@
 //         Console.WriteLine("The lookback put option price is " + lookbackput);
 //         var rangeoption  = o.RangeOption(N, T, mu, sigma, s0, K, r,price);
 //         Console.WriteLine("The Range option price is " + rangeoption);
-        //Console.WriteLine("The standard error of European call option price Estimation is " +
-                          //call["standard error estimation"]);
-        //Console.WriteLine("The call option delta is " + callGreeks["delta"]);
-        //Console.WriteLine("The call option gamma is " + callGreeks["gamma"]);
-        //Console.WriteLine("The call option vega is " + callGreeks["vega"]);
-        //Console.WriteLine("The call option rho is " + callGreeks["rho"]);
-        //var put = o.EuropeanPut(N, T, mu, sigma, s0, K, r, price);
-        //var putGreeks = o.PutGreeks(N, T, mu, sigma, s0, K, r, varianceReduction);
-        //Console.WriteLine("The European call option price is " + put["put option price"]);
-        //Console.WriteLine("The standard error of European call option price Estimation is " +
-         //                 put["standard error estimation"]);
-        //Console.WriteLine("The call option delta is " + putGreeks["delta"]);
-        //Console.WriteLine("The call option gamma is " + putGreeks["gamma"]);
-        //Console.WriteLine("The call option vega is " + putGreeks["vega"]);
-        //Console.WriteLine("The call option theta is " + putGreeks["theta"]);
-        //Console.WriteLine("The call option rho is " + putGreeks["rho"]);
-    //}
-//}
+//         Console.WriteLine("The standard error of European call option price Estimation is " +
+//                           call["standard error estimation"]);
+//         Console.WriteLine("The call option delta is " + callGreeks["delta"]);
+//         Console.WriteLine("The call option gamma is " + callGreeks["gamma"]);
+//         Console.WriteLine("The call option vega is " + callGreeks["vega"]);
+//         Console.WriteLine("The call option rho is " + callGreeks["rho"]);
+//         var put = o.EuropeanPut(N, T, mu, sigma, s0, K, r, price);
+//         var putGreeks = o.PutGreeks(N, T, mu, sigma, s0, K, r, varianceReduction);
+//         Console.WriteLine("The European call option price is " + put["put option price"]);
+//         Console.WriteLine("The standard error of European call option price Estimation is " +
+//                          put["standard error estimation"]);
+//         Console.WriteLine("The call option delta is " + putGreeks["delta"]);
+//         Console.WriteLine("The call option gamma is " + putGreeks["gamma"]);
+//         Console.WriteLine("The call option vega is " + putGreeks["vega"]);
+//         Console.WriteLine("The call option theta is " + putGreeks["theta"]);
+//         Console.WriteLine("The call option rho is " + putGreeks["rho"]);
+//     }
+// }

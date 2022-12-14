@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Monte_Carlo_Simulation;
 
 namespace OptionDatabase.Controllers;
 
@@ -84,7 +85,7 @@ public class dbController : ControllerBase
     {
         return db.Markets.Find(id);
     }
-    
+
     [HttpPut]
     [Route("/Market")]
     public ActionResult<TradingMarket> UpdateMarkets([FromBody] TradingMarket market)
@@ -240,55 +241,65 @@ public class dbController : ControllerBase
     }
 
 
-        //FinancialInstrumetn controllers
+    //FinancialInstrumetn controllers
 
-        [HttpGet]
-        [Route("/FinancialInstrument")]
-        public IEnumerable <FinancialInstrument> GetInstruments(){
-            return db.FinancialInstruments.ToArray();
+    [HttpGet]
+    [Route("/FinancialInstrument")]
+    public IEnumerable<FinancialInstrument> GetInstruments()
+    {
+        return db.FinancialInstruments.ToArray();
+    }
+
+    [HttpGet]
+    [Route("/FinancialInstrument/{id}")]
+    public ActionResult<FinancialInstrument> GetInstruments(int id)
+    {
+        return db.FinancialInstruments.Find(id);
+    }
+
+    [HttpPut]
+    [Route("/FinancialInstrument")]
+    public ActionResult<FinancialInstrument> UpdateInstruments([FromBody] FinancialInstrument instruments)
+    {
+        var existingInstruments = db.FinancialInstruments.Find(instruments.FinancialInstrumentID);
+        if (existingInstruments == null)
+        {
+            db.FinancialInstruments.Add(instruments);
         }
-
-        [HttpGet]
-        [Route("/FinancialInstrument/{id}")]
-        public ActionResult<FinancialInstrument> GetInstruments(int id){
-            return db.FinancialInstruments.Find(id);}
-
-        [HttpPut]
-        [Route("/FinancialInstrument")]
-        public ActionResult <FinancialInstrument> UpdateInstruments([FromBody] FinancialInstrument instruments){
-            var existingInstruments = db.FinancialInstruments.Find(instruments.FinancialInstrumentID);
-            if (existingInstruments == null) {
-                db.FinancialInstruments.Add(instruments);
-            } else {
-                existingInstruments.FinancialInstrumentID = instruments.FinancialInstrumentID;
-                instruments = null;
-                db.FinancialInstruments.Update(existingInstruments); 
-            }
-            db.SaveChanges();
-            return Ok(instruments);
+        else
+        {
+            existingInstruments.FinancialInstrumentID = instruments.FinancialInstrumentID;
+            instruments = null;
+            db.FinancialInstruments.Update(existingInstruments);
         }
-      [HttpDelete("/FinancialInstrument/delete/{id}")]
-        public ActionResult <FinancialInstrument> DeleteInstruments(int id){
-            var instrument = db.FinancialInstruments.Find(id);
-            db.FinancialInstruments.Remove(instrument);
-            db.SaveChanges();
-            return NoContent();
-        }
+        db.SaveChanges();
+        return Ok(instruments);
+    }
+    [HttpDelete("/FinancialInstrument/delete/{id}")]
+    public ActionResult<FinancialInstrument> DeleteInstruments(int id)
+    {
+        var instrument = db.FinancialInstruments.Find(id);
+        db.FinancialInstruments.Remove(instrument);
+        db.SaveChanges();
+        return NoContent();
+    }
 
 
-        [HttpDelete("/FinancialInstrument/delete-all")]
-        public ActionResult DeleteInstruments(){
-            var instruments = db.FinancialInstruments.ToArray();
+    [HttpDelete("/FinancialInstrument/delete-all")]
+    public ActionResult DeleteInstruments()
+    {
+        var instruments = db.FinancialInstruments.ToArray();
 
-            foreach (FinancialInstrument instrument in instruments)
+        foreach (FinancialInstrument instrument in instruments)
+        {
+            if (instrument != null)
             {
-                if(instrument != null) {
-                    db.FinancialInstruments.Remove(instrument);
-                }
+                db.FinancialInstruments.Remove(instrument);
             }
-            db.SaveChanges();
-            return Ok();
         }
+        db.SaveChanges();
+        return Ok();
+    }
 
     //     //RatePoints Controllers
     //     [HttpGet]
@@ -468,7 +479,7 @@ public class dbController : ControllerBase
     }
 
     //     //Option Controllers (combine different otpion classes into same table and display them?)
-    
+
     //     //Trade Controllers 
 
     [HttpGet]
@@ -556,7 +567,7 @@ public class dbController : ControllerBase
         }
         else
         {
-            existingEuropeans.Expiration_Date = europeans.Expiration_Date;
+            existingEuropeans.expireIn = europeans.expireIn;
             existingEuropeans.Strike = europeans.Strike;
             existingEuropeans.Is_Call = europeans.Is_Call;
             existingEuropeans.volatility = europeans.volatility;
@@ -656,10 +667,68 @@ public class dbController : ControllerBase
         return Ok();
     }
 
+
+
+    public class GreekCalcParam
+    {
+        public string Type { get; set; }
+        public double Quantity { get; set; }
+        public double TradePrice { get; set; }
+        public int FinancialInstrumentId { get; set; }
+    }
+
     [HttpPost]
     [Route("/Simulate")]
-    public ActionResult Simulate([FromBody]  request)) {
+    public ActionResult Simulate([FromBody] GreekCalcParam request)
+    {
+        var evaluation = new Option_Trade_Evaluation();
 
+        long N = 10000;
+        double mu = 0.05;
+        double r = 0.03;
+        // T : by year, Option table_ expiration date
+        //sigma: Option table_volatility
+        //s0: Option table_underlying price
+        //k:option table_strike
+        //r: ratepoint table rate (if this is too complicated, we can just use 0.03)
+        //price: output of method StockSimulator.StockPath (this method need the output of method RandomNumberGenerator.Generate)
+        //iscall: Option table iscall
+        //radom number : output of method RandomNumberGenerator.Generate (Input N & T into this method, same as the N & T here)
+
+        var greeksCalc = new GreeksCalc();
+        var european = db.Europeans.Find(request.FinancialInstrumentId);
+
+        if (european != null)
+        {
+            var underlying = db.Underlyings.Find(european.underlyingId);
+            var price = StockSimulator.StockPath(N, european.expireIn, mu, european.volatility, underlying.price, RandomNumberGenerator.Generate());
+            var greekResult = greeksCalc.EuropeanGreeks(N, european.expireIn, mu, european.volatility, underlying.price, european.Strike, r, price, european.Is_Call);
+
+            var optionResult = OptionCalculator.EuropeanOptionCalc(N, european.expireIn, mu, european.volatility, underlying.price, european.Strike, r, price, european.Is_Call);
+
+            evaluation = new Option_Trade_Evaluation
+            {
+                Unrealized_Pnl = (optionResult - request.TradePrice) * request.Quantity,
+                Delta = greekResult["delta"],
+                Gamma = greekResult["gamma"],
+                Vega = greekResult["vega"],
+                Rho = greekResult["rho"],
+                Theta = greekResult["theta"]
+            };
+            var savedeval = db.OptionTradeEvaluations.Add(evaluation);
+            evaluation.Id = savedeval.Entity.Id;
+        }
+        db.SaveChanges();
+
+        db.Trades.Add(new Trade
+        {
+            quantity = request.Quantity,
+            Trade_Price = request.TradePrice,
+            FinancialInstrumentId = request.FinancialInstrumentId,
+            EvaluationId = evaluation.Id
+        });
+
+        db.SaveChanges();
         return Ok();
     }
 
@@ -669,35 +738,29 @@ public class dbController : ControllerBase
     [HttpGet]
     [Route("/Load")]
     public ActionResult Load()
-    {   
+    {
 
         // exchanges
-        db.Exchanges.Add(new Exchange { Id = 1, Name = "my exchange1", Symbol = "EE1"});
-        db.Exchanges.Add(new Exchange { Id = 2, Name = "my exchange2", Symbol = "EE2"});
+        var exchagne1 = db.Exchanges.Add(new Exchange { Name = "my exchange1", Symbol = "EE1" });
+        var exchagne2 = db.Exchanges.Add(new Exchange { Name = "my exchange2", Symbol = "EE2" });
+        db.SaveChanges();
 
         // markets
-        db.Markets.Add(new TradingMarket { Id = 1, Name = "my market1-1", ExchangeId = 1 });
-        db.Markets.Add(new TradingMarket { Id = 2, Name = "my market1-2", ExchangeId = 1 });
-        db.Markets.Add(new TradingMarket { Id = 3, Name = "my market1-3", ExchangeId = 1 });
-        db.Markets.Add(new TradingMarket { Id = 4, Name = "my market2-1", ExchangeId = 2 });
-        db.Markets.Add(new TradingMarket { Id = 5, Name = "my market2-2", ExchangeId = 2 });
-        db.Markets.Add(new TradingMarket { Id = 6, Name = "my market2-3", ExchangeId = 2 });
-
-
+        var m1 = db.Markets.Add(new TradingMarket {Name = "my market1", ExchangeId = exchagne1.Entity.Id });
+        var m2 = db.Markets.Add(new TradingMarket {Name = "my market2", ExchangeId = exchagne2.Entity.Id });
+        db.SaveChanges();
 
         // underlyings
-        db.Underlyings.Add(new Underlying { FinancialInstrumentID = 1, Name= "my underlying1", Symbol = "UL1",  price = 50, TradingMarketId = 1 });
-        db.Underlyings.Add(new Underlying { FinancialInstrumentID = 2, Name= "my underlying2", Symbol = "UL2",  price = 100, TradingMarketId = 2 });
-        db.Underlyings.Add(new Underlying { FinancialInstrumentID = 3, Name= "my underlying3", Symbol = "UL3",  price = 20, TradingMarketId = 3 });
-        db.Underlyings.Add(new Underlying { FinancialInstrumentID = 4, Name= "my underlying4", Symbol = "UL4",  price = 40, TradingMarketId = 1 });
+        var u1 = db.Underlyings.Add(new Underlying { Name = "my underlying1", Symbol = "UL1", price = 50, TradingMarketId = m1.Entity.Id });
+        var u2 = db.Underlyings.Add(new Underlying { Name = "my underlying2", Symbol = "UL2", price = 100, TradingMarketId = m2.Entity.Id });
+        db.SaveChanges();
 
         // European optiosn
-        db.Europeans.Add(new European { FinancialInstrumentID = 5, Name = "European option 1", Symbol = "EO1", Expiration_Date = "11/1/2022", Strike = 50, Is_Call = true, volatility = 0.2, underlyingId = 1, TradingMarketId = 1 });
-        db.Europeans.Add(new European { FinancialInstrumentID = 6, Name = "European option 2", Symbol = "EO2", Expiration_Date = "1/2/2020", Strike = 50, Is_Call = true, volatility = 0.3, underlyingId = 2, TradingMarketId = 2 });
-        db.Europeans.Add(new European { FinancialInstrumentID = 7, Name = "European option 3", Symbol = "EO3", Expiration_Date = "10/14/2022", Strike = 50, Is_Call = true, volatility = 0.25, underlyingId = 3, TradingMarketId = 3 });
-        db.Europeans.Add(new European { FinancialInstrumentID = 8, Name = "European option 4", Symbol = "EO4", Expiration_Date = "11/12/2021", Strike = 50, Is_Call = true, volatility = 0.19, underlyingId = 1, TradingMarketId = 1 });
+        db.Europeans.Add(new European { Name = "European option 3", Symbol = "EO3", expireIn = 8, Strike = 50, Is_Call = true, price = 150, volatility = 0.25, underlyingId = u1.Entity.FinancialInstrumentID, TradingMarketId = m1.Entity.Id });
+        db.Europeans.Add(new European {  Name = "European option 4", Symbol = "EO4", expireIn = 2, Strike = 50, Is_Call = true, price = 200, volatility = 0.19, underlyingId = u2.Entity.FinancialInstrumentID, TradingMarketId = m2.Entity.Id });
 
         db.SaveChanges();
         return Ok();
     }
 }
+

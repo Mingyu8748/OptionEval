@@ -11,7 +11,7 @@ using OptionDatabase;
 namespace OptionEval.Migrations
 {
     [DbContext(typeof(FinanceContext))]
-    [Migration("20221213200315_init")]
+    [Migration("20221214034353_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -115,6 +115,9 @@ namespace OptionEval.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("EvaluationId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("FinancialInstrumentId")
                         .HasColumnType("integer");
 
@@ -125,6 +128,8 @@ namespace OptionEval.Migrations
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EvaluationId");
 
                     b.HasIndex("FinancialInstrumentId");
 
@@ -157,9 +162,8 @@ namespace OptionEval.Migrations
                 {
                     b.HasBaseType("OptionDatabase.FinancialInstrument");
 
-                    b.Property<string>("Expiration_Date")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<double>("expireIn")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("underlyingId")
                         .HasColumnType("integer");
@@ -274,11 +278,19 @@ namespace OptionEval.Migrations
 
             modelBuilder.Entity("OptionDatabase.Trade", b =>
                 {
+                    b.HasOne("OptionDatabase.Option_Trade_Evaluation", "Evaluation")
+                        .WithMany()
+                        .HasForeignKey("EvaluationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("OptionDatabase.FinancialInstrument", "financialInstrument")
                         .WithMany()
                         .HasForeignKey("FinancialInstrumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Evaluation");
 
                     b.Navigation("financialInstrument");
                 });

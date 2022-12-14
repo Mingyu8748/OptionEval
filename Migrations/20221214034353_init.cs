@@ -93,7 +93,8 @@ namespace OptionEval.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     quantity = table.Column<double>(type: "double precision", nullable: false),
                     FinancialInstrumentId = table.Column<int>(type: "integer", nullable: false),
-                    TradePrice = table.Column<double>(name: "Trade_Price", type: "double precision", nullable: false)
+                    TradePrice = table.Column<double>(name: "Trade_Price", type: "double precision", nullable: false),
+                    EvaluationId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,6 +104,12 @@ namespace OptionEval.Migrations
                         column: x => x.FinancialInstrumentId,
                         principalTable: "FinancialInstrument",
                         principalColumn: "FinancialInstrumentID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Trade_OptionTradeEvaluation_EvaluationId",
+                        column: x => x.EvaluationId,
+                        principalTable: "OptionTradeEvaluation",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -129,7 +136,7 @@ namespace OptionEval.Migrations
                 {
                     FinancialInstrumentID = table.Column<int>(type: "integer", nullable: false),
                     volatility = table.Column<double>(type: "double precision", nullable: false),
-                    ExpirationDate = table.Column<string>(name: "Expiration_Date", type: "text", nullable: false),
+                    expireIn = table.Column<double>(type: "double precision", nullable: false),
                     underlyingId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -280,6 +287,11 @@ namespace OptionEval.Migrations
                 column: "underlyingId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Trade_EvaluationId",
+                table: "Trade",
+                column: "EvaluationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Trade_FinancialInstrumentId",
                 table: "Trade",
                 column: "FinancialInstrumentId");
@@ -304,9 +316,6 @@ namespace OptionEval.Migrations
                 name: "Lookback");
 
             migrationBuilder.DropTable(
-                name: "OptionTradeEvaluation");
-
-            migrationBuilder.DropTable(
                 name: "Range");
 
             migrationBuilder.DropTable(
@@ -314,6 +323,9 @@ namespace OptionEval.Migrations
 
             migrationBuilder.DropTable(
                 name: "Option");
+
+            migrationBuilder.DropTable(
+                name: "OptionTradeEvaluation");
 
             migrationBuilder.DropTable(
                 name: "Underlying");
